@@ -140,3 +140,32 @@ Buffer（缓冲区）：
     背压：这是node.js在处理高并发时候的优化机制，当你从一个极快的硬盘中取数据，发送到一个极慢的网络连接
 如果不控制，读的块发的慢，内存的buffer会积压成千上万个buffer,最后爆内存。所以需要
 背压机制，当下游满了，它会告诉上游别发了处理不过来了，这时候上游会暂停读取，直到下游疏通后继续读取
+
+fs:
+import fs from 'node:fs/promises';
+
+// 读写整文件
+await fs.readFile(path, 'utf8');
+await fs.writeFile(path, content);
+await fs.appendFile(path, content);
+
+// 元信息
+const stat = await fs.stat(path);     // 大小、时间、是否文件/目录
+stat.isFile(); stat.isDirectory();
+
+// 目录
+await fs.readdir(path);                       // 列出文件名
+await fs.readdir(path, { withFileTypes: true }); // 返回 Dirent[]，自带类型判断
+await fs.mkdir(path, { recursive: true });    // 递归创建（mkdir -p）
+await fs.rm(path, { recursive: true, force: true }); // 递归删除（rm -rf）
+
+// 重命名、复制、链接
+await fs.rename(src, dst);
+await fs.copyFile(src, dst);
+await fs.symlink(target, linkPath);
+
+// 权限检查
+try { await fs.access(path, fs.constants.R_OK); } catch { /* 不可读 */ }
+
+// 监听变化
+const watcher = fs.watch(path, (event, filename) => { ... });
