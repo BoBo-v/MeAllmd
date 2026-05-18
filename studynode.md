@@ -168,4 +168,4 @@ await fs.symlink(target, linkPath);
 try { await fs.access(path, fs.constants.R_OK); } catch { /* 不可读 */ }
 
 // 监听变化
-const watcher = fs.watch(path, (event, filename) => { ... });
+const watcher = fs.watch(path, (event, filename) => { ... }) ;
